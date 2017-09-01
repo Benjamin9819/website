@@ -3,22 +3,18 @@ title: "SQL"
 output: html_document
 ---
 
-# This is a level 1 header
-## This is a level 2 header
-###### Is this actually level 6
+## Filtering Columns and Rows
 
-How does typing a normal sentence without prefix look?
+With SQL, you can filter columns and rows by using SELECT and WHERE. Let's look at an exmaple using the Lahman database. So we should first load that database, along with the package sqldf.
 
-* item 1
-* item 2
-* batman
-* item 4
+```{r message=FALSE, warning=FALSE}
+library(Lahman)
+library(sqldf)
+```
 
-column 1 | column 2
----|---
-rangers | Dodgers
-Pirates | indians
-Blue Jays | Red Sox
-
-
-<img src="batman.jpg" width="400" height="250"/>
+Suppose now I would like to see the homerun totals for the 1927 Yankees. I could just as easily writing the following: 
+```{r}
+query<-"select playerID, yearID, teamID, HR FROM Batting
+WHERE teamID='NYA' and yearID=1927"
+sqldf(query)
+```
