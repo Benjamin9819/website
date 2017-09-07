@@ -27,7 +27,7 @@ sqldf(query)
 ```
 
 Let's look at example with more than one constraint. Suppose we want more than 40 homeruns, but less than 60 strikeouts:
-```{r}
+```{r} 
 query<-"select playerID, yearID, teamID, HR, SO FROM Batting
 WHERE HR>40 and SO<60"
 sqldf(query)
