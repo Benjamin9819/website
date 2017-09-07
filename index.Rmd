@@ -18,3 +18,24 @@ query<-"select playerID, yearID, teamID, HR FROM Batting
 WHERE teamID='NYA' and yearID=1927"
 sqldf(query)
 ```
+
+Let's look at another example. Let's say I want all instances where the Yankees hit 40 homeruns or more. That would look like this:
+```{r}
+query<-"select playerID, yearID, teamID, HR FROM Batting
+WHERE teamID='NYA' and HR>=40"
+sqldf(query)
+```
+
+Let's look at example with more than one constraint. Suppose we want more than 40 homeruns, but less than 60 strikeouts:
+```{r}
+query<-"select playerID, yearID, teamID, HR, SO FROM Batting
+WHERE HR>40 and SO<60"
+sqldf(query)
+```
+
+For a final test, let's add two constraints to the same category. Let's discriminate Phillies with more than 30 Homeruns during the 1970s.
+```{r}
+query<-"select playerID, yearID, teamID, HR FROM Batting
+WHERE teamID='PHI' AND HR>30 and yearID>1969 and yearID<1980"
+sqldf(query)
+```
