@@ -48,3 +48,21 @@ WHERE HR>50
 ORDER BY HR DESC"
 sqldf(query)
 ```
+
+Here's an exmaple with two constraints, strikeouts and the number of at bats:
+```{r}
+query<-"select playerID, yearID, teamID, AB, SO FROM Batting
+WHERE SO<10 and AB>=400
+ORDER BY SO"
+sqldf(query)
+```
+
+
+## AGGREGATION
+
+
+```{r}
+
+```
+
+## JOINS
