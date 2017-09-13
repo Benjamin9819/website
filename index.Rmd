@@ -99,7 +99,7 @@ WHERE Batting.playerID='ruthba01'"
 sqldf(query)
 ```
 
-
+Our second example here is to display all players who hit more than 50 homeruns, but to replace their playerID with their real first and last names.
 ```{r}
 query<-"select teamID, HR, nameFirst, nameLast, yearID
 From Batting INNER JOIN Master
@@ -110,7 +110,7 @@ sqldf(query)
 ```
 
 
-Our third example is to determine
+Our third example is to replace babe Ruth's teamIDs with the actual team name, this time taking it from the "Teams" column.
 ```{r}
 
 query<-"Select playerID, name, Batting.yearID, Batting.HR
