@@ -356,9 +356,152 @@ sqldf(query)</code></pre>
 </div>
 <div id="aggregation" class="section level2">
 <h2>AGGREGATION</h2>
+<p>Aggregation is a way to combine multiple rows into a single data output. This includes averaging, sum, mins or maxes of a data range.</p>
+<p>Our first example is to find the average homes Babe Ruth had throughout his career.</p>
+<pre class="r"><code>query&lt;-&quot;select playerID, sum(HR) from Batting where playerID='ruthba01'
+group by playerID&quot;
+sqldf(query)</code></pre>
+<pre><code>##   playerID sum(HR)
+## 1 ruthba01     714</code></pre>
+<p>Our second example to is find all players who had over 600 homeruns throughout their career. That looks like this.</p>
+<pre class="r"><code>query&lt;-&quot;select playerID, sum(HR) from Batting 
+group by playerID 
+having sum(HR)&gt;=600
+order by sum(HR) desc&quot;
+sqldf(query)</code></pre>
+<pre><code>##    playerID sum(HR)
+## 1 bondsba01     762
+## 2 aaronha01     755
+## 3  ruthba01     714
+## 4 rodrial01     696
+## 5  mayswi01     660
+## 6 griffke02     630
+## 7 thomeji01     612
+## 8  sosasa01     609</code></pre>
+<p>Our final example is to rank the players by their average homeruns per season, which combines several intuitive code forms.</p>
+<pre class="r"><code>query&lt;-&quot;select PlayerID, avg(hr) FROM Batting
+GROUP BY playerID
+HAVING avg(HR)&gt;30
+ORDER BY AVG(HR)&gt;30 DESC&quot;
+sqldf(query)</code></pre>
+<pre><code>##     playerID  avg(hr)
+## 1  aaronha01 32.82609
+## 2  abreujo02 30.33333
+## 3  belleal01 31.75000
+## 4  bondsba01 34.63636
+## 5  bryankr01 32.50000
+## 6  cabremi01 31.85714
+## 7  kinerra01 33.54545
+## 8  mcgwima01 34.29412
+## 9  pujolal01 36.93750
+## 10 rodrial01 31.63636
+## 11  ruthba01 32.45455
+## 12 schmimi01 30.44444
+## 13  sosasa01 32.05263</code></pre>
 </div>
 <div id="joins" class="section level2">
 <h2>JOINS</h2>
+<p>JOINS are a way to combine data from difference data sets, IE Batting and Master. To do such a thing, for example, replacing ruthba01 with Babe Ruth, looks like this.</p>
+<pre class="r"><code>query&lt;-&quot;select teamID, nameFirst, nameLast, yearID, HR
+FROM Batting INNER JOIN Master
+ON Batting.playerID=Master.playerID
+WHERE Batting.playerID='ruthba01'&quot;
+sqldf(query)</code></pre>
+<pre><code>##    teamID nameFirst nameLast yearID HR
+## 1     BOS      Babe     Ruth   1914  0
+## 2     BOS      Babe     Ruth   1915  4
+## 3     BOS      Babe     Ruth   1916  3
+## 4     BOS      Babe     Ruth   1917  2
+## 5     BOS      Babe     Ruth   1918 11
+## 6     BOS      Babe     Ruth   1919 29
+## 7     NYA      Babe     Ruth   1920 54
+## 8     NYA      Babe     Ruth   1921 59
+## 9     NYA      Babe     Ruth   1922 35
+## 10    NYA      Babe     Ruth   1923 41
+## 11    NYA      Babe     Ruth   1924 46
+## 12    NYA      Babe     Ruth   1925 25
+## 13    NYA      Babe     Ruth   1926 47
+## 14    NYA      Babe     Ruth   1927 60
+## 15    NYA      Babe     Ruth   1928 54
+## 16    NYA      Babe     Ruth   1929 46
+## 17    NYA      Babe     Ruth   1930 49
+## 18    NYA      Babe     Ruth   1931 46
+## 19    NYA      Babe     Ruth   1932 41
+## 20    NYA      Babe     Ruth   1933 34
+## 21    NYA      Babe     Ruth   1934 22
+## 22    BSN      Babe     Ruth   1935  6</code></pre>
+<pre class="r"><code>query&lt;-&quot;select teamID, HR, nameFirst, nameLast, yearID
+From Batting INNER JOIN Master
+ON Batting.playerID=Master.PlayerID
+WHERE HR&gt;50
+ORDER BY HR&quot;
+sqldf(query)</code></pre>
+<pre><code>##    teamID HR nameFirst  nameLast yearID
+## 1     PIT 51     Ralph     Kiner   1947
+## 2     NY1 51    Johnny      Mize   1947
+## 3     NY1 51    Willie      Mays   1955
+## 4     DET 51     Cecil   Fielder   1990
+## 5     ATL 51    Andruw     Jones   2005
+## 6     NYA 52    Mickey    Mantle   1956
+## 7     SFN 52    Willie      Mays   1965
+## 8     CIN 52    George    Foster   1977
+## 9     OAK 52      Mark   McGwire   1996
+## 10    TEX 52      Alex Rodriguez   2001
+## 11    CLE 52       Jim     Thome   2002
+## 12    BAL 53     Chris     Davis   2013
+## 13    NYA 54      Babe      Ruth   1920
+## 14    NYA 54      Babe      Ruth   1928
+## 15    PIT 54     Ralph     Kiner   1949
+## 16    NYA 54    Mickey    Mantle   1961
+## 17    BOS 54     David     Ortiz   2006
+## 18    NYA 54      Alex Rodriguez   2007
+## 19    TOR 54      Jose  Bautista   2010
+## 20    CHN 56      Hack    Wilson   1930
+## 21    SEA 56       Ken   Griffey   1997
+## 22    SEA 56       Ken   Griffey   1998
+## 23    ARI 57      Luis  Gonzalez   2001
+## 24    TEX 57      Alex Rodriguez   2002
+## 25    PHA 58    Jimmie      Foxx   1932
+## 26    DET 58      Hank Greenberg   1938
+## 27    PHI 58      Ryan    Howard   2006
+## 28    NYA 59      Babe      Ruth   1921
+## 29    NYA 60      Babe      Ruth   1927
+## 30    NYA 61     Roger     Maris   1961
+## 31    CHN 63     Sammy      Sosa   1999
+## 32    CHN 64     Sammy      Sosa   2001
+## 33    SLN 65      Mark   McGwire   1999
+## 34    CHN 66     Sammy      Sosa   1998
+## 35    SLN 70      Mark   McGwire   1998
+## 36    SFN 73     Barry     Bonds   2001</code></pre>
+<p>Our third example is to determine</p>
+<pre class="r"><code>query&lt;-&quot;Select playerID, name, Batting.yearID, Batting.HR
+FROM Batting INNER JOIN Teams
+ON Batting.teamID=Teams.teamID and Batting.yearID=Teams.yearID
+WHERE playerID='ruthba01'&quot;
+sqldf(query)</code></pre>
+<pre><code>##    playerID             name yearID HR
+## 1  ruthba01   Boston Red Sox   1914  0
+## 2  ruthba01   Boston Red Sox   1915  4
+## 3  ruthba01   Boston Red Sox   1916  3
+## 4  ruthba01   Boston Red Sox   1917  2
+## 5  ruthba01   Boston Red Sox   1918 11
+## 6  ruthba01   Boston Red Sox   1919 29
+## 7  ruthba01 New York Yankees   1920 54
+## 8  ruthba01 New York Yankees   1921 59
+## 9  ruthba01 New York Yankees   1922 35
+## 10 ruthba01 New York Yankees   1923 41
+## 11 ruthba01 New York Yankees   1924 46
+## 12 ruthba01 New York Yankees   1925 25
+## 13 ruthba01 New York Yankees   1926 47
+## 14 ruthba01 New York Yankees   1927 60
+## 15 ruthba01 New York Yankees   1928 54
+## 16 ruthba01 New York Yankees   1929 46
+## 17 ruthba01 New York Yankees   1930 49
+## 18 ruthba01 New York Yankees   1931 46
+## 19 ruthba01 New York Yankees   1932 41
+## 20 ruthba01 New York Yankees   1933 34
+## 21 ruthba01 New York Yankees   1934 22
+## 22 ruthba01    Boston Braves   1935  6</code></pre>
 </div>
 
 

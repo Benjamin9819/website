@@ -59,10 +59,64 @@ sqldf(query)
 
 
 ## AGGREGATION
+Aggregation is a way to combine multiple rows into a single data output. This includes averaging, sum, mins or maxes of a data range.
+
+Our first example is to find the average homes Babe Ruth had throughout his career.
+```{r}
+query<-"select playerID, sum(HR) from Batting where playerID='ruthba01'
+group by playerID"
+sqldf(query)
+```
+
+Our second example to is find all players who had over 600 homeruns throughout their career. That looks like this.
+```{r}
+query<-"select playerID, sum(HR) from Batting 
+group by playerID 
+having sum(HR)>=600
+order by sum(HR) desc"
+sqldf(query)
+```
+
+
+Our final example is to rank the players by their average homeruns per season, which combines several intuitive code forms.
+```{r}
+query<-"select PlayerID, avg(hr) FROM Batting
+GROUP BY playerID
+HAVING avg(HR)>30
+ORDER BY AVG(HR)>30 DESC"
+sqldf(query)
+```
+
+
+## JOINS
+
+JOINS are a way to combine data from difference data sets, IE Batting and Master. To do such a thing, for example, replacing ruthba01 with Babe Ruth, looks like this.
+```{r}
+query<-"select teamID, nameFirst, nameLast, yearID, HR
+FROM Batting INNER JOIN Master
+ON Batting.playerID=Master.playerID
+WHERE Batting.playerID='ruthba01'"
+sqldf(query)
+```
 
 
 ```{r}
-
+query<-"select teamID, HR, nameFirst, nameLast, yearID
+From Batting INNER JOIN Master
+ON Batting.playerID=Master.PlayerID
+WHERE HR>50
+ORDER BY HR"
+sqldf(query)
 ```
 
-## JOINS
+
+Our third example is to determine
+```{r}
+
+query<-"Select playerID, name, Batting.yearID, Batting.HR
+FROM Batting INNER JOIN Teams
+ON Batting.teamID=Teams.teamID and Batting.yearID=Teams.yearID
+WHERE playerID='ruthba01'"
+sqldf(query)
+```
+
