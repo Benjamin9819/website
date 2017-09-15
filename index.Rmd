@@ -120,3 +120,36 @@ WHERE playerID='ruthba01'"
 sqldf(query)
 ```
 
+Here's another example where we display both Babe Ruth's actual name and the actual team he played for in a given year.
+```{r}
+query<-"SELECT  nameFirst, nameLast, name, Batting.HR, Batting.yearID 
+FROM Batting INNER JOIN Teams INNER JOIN Master
+ON Batting.teamID=Teams.teamID and Batting.yearID=Teams.yearID and batting.playerID=Master.PlayerID
+where batting.playerID='ruthba01'"
+sqldf(query)
+
+```
+
+##Additional Examples
+This example gives all players with more than 600 career homeruns, this time giving us their real names.
+```{r}
+query<-"Select namefirst, nameLast, sum(Batting.HR)
+from Batting INNER JOIN Master
+ON Batting.playerID=Master.playerID
+GROUP BY Batting.playerID
+Having sum(Batting.HR)>600
+ORDER BY sum(HR) DESC"
+sqldf(query)
+```
+
+
+sqldf(query)
+```{r}
+query<-"Select salary, nameFirst, nameLast
+FROM Batting INNER JOIN Master INNER Join Salaries
+on Batting.playerID=Master.PlayerID=Salaries.playerID
+GROUP by Batting.playerID
+Having avg(salary)>1000000
+ORDER BY avg(salary) DESC"
+sqldf(query)
+```
