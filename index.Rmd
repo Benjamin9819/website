@@ -2,7 +2,7 @@
 title: "SQL"
 output: html_document
 ---
-
+###By Ben Kolbrich
 ## Filtering Columns and Rows
 
 With SQL, you can filter columns and rows by using SELECT and WHERE. Let's look at an exmaple using the Lahman database. So we should first load that database, along with the package sqldf.
@@ -141,15 +141,15 @@ Having sum(Batting.HR)>600
 ORDER BY sum(HR) DESC"
 sqldf(query)
 ```
+As a final example, this slice of code will display all players with the first name "Bob" who averaged more than one million dollars per year in salary.
 
-
-sqldf(query)
 ```{r}
-query<-"Select salary, nameFirst, nameLast
-FROM Batting INNER JOIN Master INNER Join Salaries
-on Batting.playerID=Master.PlayerID=Salaries.playerID
-GROUP by Batting.playerID
-Having avg(salary)>1000000
+query<-"SELECT nameFirst,nameLast,avg(salary)
+FROM Salaries INNER JOIN Master
+ON Salaries.playerID=Master.playerID
+WHERE nameFirst='Bob'
+GROUP BY Salaries.playerID
+HAVING avg(salary)>1000000
 ORDER BY avg(salary) DESC"
 sqldf(query)
 ```

@@ -120,6 +120,9 @@ $(document).ready(function () {
 </div>
 
 
+<div id="by-ben-kolbrich" class="section level3">
+<h3>By Ben Kolbrich</h3>
+</div>
 <div id="filtering-columns-and-rows" class="section level2">
 <h2>Filtering Columns and Rows</h2>
 <p>With SQL, you can filter columns and rows by using SELECT and WHERE. Let’s look at an exmaple using the Lahman database. So we should first load that database, along with the package sqldf.</p>
@@ -535,6 +538,7 @@ sqldf(query)</code></pre>
 </div>
 <div id="additional-examples" class="section level2">
 <h2>Additional Examples</h2>
+<p>This example gives all players with more than 600 career homeruns, this time giving us their real names.</p>
 <pre class="r"><code>query&lt;-&quot;Select namefirst, nameLast, sum(Batting.HR)
 from Batting INNER JOIN Master
 ON Batting.playerID=Master.playerID
@@ -551,6 +555,24 @@ sqldf(query)</code></pre>
 ## 6       Ken   Griffey             630
 ## 7       Jim     Thome             612
 ## 8     Sammy      Sosa             609</code></pre>
+<p>As a final example, this slice of code will display all players with the first name “Bob” who averaged more than one million dollars per year in salary.</p>
+<pre class="r"><code>query&lt;-&quot;SELECT nameFirst,nameLast,avg(salary)
+FROM Salaries INNER JOIN Master
+ON Salaries.playerID=Master.playerID
+WHERE nameFirst='Bob'
+GROUP BY Salaries.playerID
+HAVING avg(salary)&gt;1000000
+ORDER BY avg(salary) DESC&quot;
+sqldf(query)</code></pre>
+<pre><code>##   nameFirst  nameLast avg(salary)
+## 1       Bob   Wickman     2635813
+## 2       Bob     Welch     1930417
+## 3       Bob     Howry     1804583
+## 4       Bob    Horner     1416667
+## 5       Bob Tewksbury     1288182
+## 6       Bob   Stanley     1067500
+## 7       Bob     Boone     1047580
+## 8       Bob     Ojeda     1035926</code></pre>
 </div>
 
 
