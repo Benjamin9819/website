@@ -61,7 +61,7 @@ sqldf(query)
 ## AGGREGATION
 Aggregation is a way to combine multiple rows into a single data output. This includes averaging, sum, mins or maxes of a data range.
 
-Our first example is to find the average homes Babe Ruth had throughout his career.
+Our first example is to find the sum homeruns Babe Ruth had throughout his career.
 ```{r}
 query<-"select playerID, sum(HR) from Batting where playerID='ruthba01'
 group by playerID"

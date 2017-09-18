@@ -360,7 +360,7 @@ sqldf(query)</code></pre>
 <div id="aggregation" class="section level2">
 <h2>AGGREGATION</h2>
 <p>Aggregation is a way to combine multiple rows into a single data output. This includes averaging, sum, mins or maxes of a data range.</p>
-<p>Our first example is to find the average homes Babe Ruth had throughout his career.</p>
+<p>Our first example is to find the sum homeruns Babe Ruth had throughout his career.</p>
 <pre class="r"><code>query&lt;-&quot;select playerID, sum(HR) from Batting where playerID='ruthba01'
 group by playerID&quot;
 sqldf(query)</code></pre>
